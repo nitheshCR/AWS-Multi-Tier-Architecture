@@ -1,0 +1,15 @@
+import json
+import boto3
+
+dynamo= boto3.resource('dynamodb')
+table = dynamo.Table('animal_counting')
+
+def lambda_handler(event, context):
+    resp = table.get_item(Key={"animal":event['animal']})
+    print(resp['Item']['count'])
+    count = resp['Item']['count']
+    count= count+1
+    inp = {"animal":event['animal'],"count":count}
+    table.put_item(Item=inp)
+    # TODO implement
+    return "successful"
