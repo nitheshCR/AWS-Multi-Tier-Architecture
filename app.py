@@ -1,61 +1,54 @@
-from flask import Flask, render_template, request, redirect, jsonify
-import json
+from flask import Flask,render_template,request,url_for
 import requests
-app = Flask(__name__)
-s = ""
-j = {"data": ""}
+app=Flask(__name__)
+@app.route('/',methods=['POST','GET'])
+def hello():
+    if request.method=='POST':
+        cs=request.form['a']
+        geo=request.form['r2']
+        gen=request.form['r1']
+        age=request.form['b']
+        tenure=request.form['c']
+        balance=request.form['d']
+        np=request.form['e']
+        hc=request.form['r3']
+        im=request.form['r4']
+        es=request.form['f']
+        try:
+            cs=int(cs)
+            geo=int(geo)
+            gen=int(gen)
+            age=int(age)
+            tenure=int(tenure)
+            balance=float(balance)
+            np=int(np)
+            hc=int(hc)
+            im=int(im)
+            es=float(es)
+        except:
+            return render_template('data.html',err_msg='Enter Valid Data')
+        url = "https://lk4lrno5l5.execute-api.ap-south-1.amazonaws.com/test"
+        payload = " {\"data\":\"" + str(cs) + ',' + str(geo) + ',' + str(gen) + ',' + str(age) + ',' + str(tenure) + ',' + str(balance) + ',' + str(np) +','+str(hc)+ ','+str(im)+',' + str(es) + "\"" + "}"
 
-
-@app.route('/', methods=["GET", "POST"])
-def index():
-    if request.method == "GET":
-
-        return render_template("index.html")
-    else:
-
-        x = request.form.get("creditscore")
-        s = str(x)
-        x = request.form.get("geography")
-        s = s+","+str(x)
-        x = request.form.get("gender")
-        s = s+","+str(x)
-        x = request.form.get("age")
-        s = s+","+str(x)
-        x = request.form.get("tenure")
-        s = s+","+str(x)
-        x = request.form.get("balance")
-        s = s+","+str(x)
-        x = request.form.get("products")
-        s = s+","+str(x)
-        x = request.form.get("hascredit")
-        s = s+","+str(x)
-        x = request.form.get("activemember")
-        s = s+","+str(x)
-        x = request.form.get("salary")
-        s = s+","+str(x)
-
-        print(s)
-        j = {"data": s}
-        print(type(j))
-        print(j)
-
-        j = json.dumps(j, indent=4)
         headers = {
-            'X-Amz-Content-Sha256': 'beaead3198f7da1e70d03ab969765e0821b24fc913697e929e726aeaebf0eba3',
-            'X-Amz-Date': '20201119T073602Z',
-            'Authorization': 'AWS4-HMAC-SHA256 Credential=AKIA4GBBQNNS2B2YLV2K/20201119/us-east-2/execute-api/aws4_request, SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=5200ecbe3c04c6bad217594cba67df08159bc91b36df9058b45e271314617cec',
-            'Content-Type': 'text/plain'
+           'X-Amz-Content-Sha256': 'beaead3198f7da1e70d03ab969765e0821b24fc913697e929e726aeaebf0eba3',
+           'X-Amz-Date': '20201122T165205Z',
+           'Authorization': 'AWS4-HMAC-SHA256 Credential=AKIA4GBBQNNS2B2YLV2K/20201122/us-east-2/execute-api/aws4_request, SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=ac8664f162cae8a90d08f9f6a8eefd46a3f9fd78d5a44522db0f4e0421a1cca1',
+           'Content-Type': 'text/plain'
         }
-        r = requests.post(
-            'https://l0qbgio5tf.execute-api.us-east-1.amazonaws.com/test', headers=headers, data=j)
-        print(r)
-        if r.text == '1':
-            res = "Yes, the customer is likely to leave"
-        else:
-            res = "No, the customer is unlikely to leave"
-        print(r.text)
-        return render_template("predict.html", res=res)
 
+        response = requests.request("POST", url, headers=headers, data=payload)
+        response=response.text.encode('utf8')
+        response=str(response)
+        print(response)
+        result=response[3]
+        print(result)
+        if result=='N':
+            return render_template('data.html',result='Not Likely to Leave')
+        else:
+            return render_template('data.html',result='Likely To Leave')
+    else:
+        return render_template('data.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=8080)
+    app.run(debug=True)
