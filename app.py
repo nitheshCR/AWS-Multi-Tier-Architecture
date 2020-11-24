@@ -27,14 +27,14 @@ def hello():
             es=float(es)
         except:
             return render_template('data.html',err_msg='Enter Valid Data')
-        url = " https://gwc4o0irzj.execute-api.ap-south-1.amazonaws.com/test"
+        url = "https://pbh24dmqj2.execute-api.ap-south-1.amazonaws.com/test"
         payload = " {\"data\":\"" + str(cs) + ',' + str(geo) + ',' + str(gen) + ',' + str(age) + ',' + str(tenure) + ',' + str(balance) + ',' + str(np) +','+str(hc)+ ','+str(im)+',' + str(es) + "\"" + "}"
 
         headers = {
-             'X-Amz-Content-Sha256': 'beaead3198f7da1e70d03ab969765e0821b24fc913697e929e726aeaebf0eba3',
-             'X-Amz-Date': '20201123T083338Z',
-             'Authorization': 'AWS4-HMAC-SHA256 Credential=AKIA4GBBQNNS2B2YLV2K/20201123/us-east-2/execute-api/aws4_request, SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=fa2d8dc5ed30cfa0a88c96caf9035b2a59fa147cc95aeb968c258b21d1282268',
-             'Content-Type': 'text/plain'
+              'X-Amz-Content-Sha256': 'beaead3198f7da1e70d03ab969765e0821b24fc913697e929e726aeaebf0eba3',
+              'X-Amz-Date': '20201124T121004Z',
+              'Authorization': 'AWS4-HMAC-SHA256 Credential=AKIA4GBBQNNS2B2YLV2K/20201124/us-east-2/execute-api/aws4_request, SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=3017ef2298f5bfb17ffa985494ab3fafe8e02c2c53e589fb5c1438ccc994bb73',
+              'Content-Type': 'text/plain'
         }
 
         response = requests.request("POST", url, headers=headers, data=payload)
